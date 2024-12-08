@@ -7,12 +7,13 @@ import 'package:virus_scanner/Register/Register.dart';
 import 'package:virus_scanner/customWidgets/bottomNavbar.dart';
 import 'package:virus_scanner/splash%20screen%20data/splash_screen.dart';
 import 'uploads/file_upload.dart';
+import 'file_analysis/file_result.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const FileUploadScreen(),
+      home:  VirusScanApp(),
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),
