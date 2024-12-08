@@ -247,7 +247,7 @@ class _Register extends State<Register> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        // Registration logic here
+                        
                       }
                     },
                     style: ElevatedButton.styleFrom(
