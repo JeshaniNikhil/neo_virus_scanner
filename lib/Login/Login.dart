@@ -60,7 +60,7 @@ class _Login extends State<Login> {
                       fontsize: 25,
                       fontWeight: FontWeight.normal),
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: TextFormField(

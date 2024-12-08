@@ -8,7 +8,7 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Register(),
+      home: const Login(),
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),

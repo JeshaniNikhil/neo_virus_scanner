@@ -60,7 +60,7 @@ class _Register extends State<Register> {
                         fontsize: 25,
                         fontWeight: FontWeight.normal),
                   ),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: TextFormField(
@@ -104,7 +104,7 @@ class _Register extends State<Register> {
                         fontsize: 25,
                         fontWeight: FontWeight.normal),
                   ),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: TextFormField(
