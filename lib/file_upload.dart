@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class FileUploadScreen extends StatefulWidget {
-  
+  const FileUploadScreen({super.key});
   @override
   _FileUploadScreenState createState() => _FileUploadScreenState();
 }
@@ -169,7 +169,8 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
           });
         },
         backgroundColor: Colors.transparent, // Transparent background
-        selectedItemColor: Colors.transparent, // Remove the default selected item color
+        selectedItemColor:
+            Colors.transparent, // Remove the default selected item color
         unselectedItemColor: Colors.grey,
         elevation: 0,
         items: [
