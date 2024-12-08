@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:virus_scanner/constants/constant.dart';
 
@@ -14,47 +15,22 @@ class _BottomNavbar extends State<Bottomnavbar> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      bottomNavigationBar: BottomNavigationBar(
-        
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        backgroundColor: primaryColor, // Ensure this is set at the top level
-        type: BottomNavigationBarType.fixed, // Ensures fixed layout
-        selectedItemColor: Colors.blueAccent, // Color for the selected item
-        unselectedItemColor: Colors.white, // Color for unselected items
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 25,
-            ),
-            label: "", // Empty label
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.purple,
+        color: primaryColor,
+        items: [
+          Icon(color: iconColor, Icons.home, size: 30),
+          Icon(color: iconColor, Icons.search, size: 30),
+          Icon(
+            color: iconColor,
+            Icons.notifications,
+            size: 30,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.search,
-              size: 25,
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.notifications,
-              size: 25,
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_2_rounded,
-              size: 25,
-            ),
-            label: "",
-          ),
+          Icon(
+            color: iconColor,
+            Icons.person_2_outlined,
+            size: 30,
+          )
         ],
       ),
     );
