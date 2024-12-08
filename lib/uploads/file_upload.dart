@@ -1,16 +1,19 @@
-// ignore_for_file: prefer_const_constructors
-
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:virus_scanner/customWidgets/bottomNavbar.dart';
 
 class FileUploadScreen extends StatefulWidget {
   const FileUploadScreen({super.key});
+
   @override
   _FileUploadScreenState createState() => _FileUploadScreenState();
 }
 
 class _FileUploadScreenState extends State<FileUploadScreen> {
   int _currentIndex = 0; // Track selected index for bottom navigation
+
+  Color iconColor = Colors.white; // Define the icon color here
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,8 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
         ),
         elevation: 0,
       ),
-      body: Center(
+      body: SafeArea(
+        // Wrap in SafeArea to prevent overlap with bottom navigation
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,6 +86,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
                   AspectRatio(
                     aspectRatio: 1.5,
                     child: Container(
+                      // width: 105,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade900,
                         borderRadius: BorderRadius.circular(12),
@@ -134,10 +139,10 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
               ),
             ),
             const SizedBox(height: 40),
-            // Max width Upload Button
             ElevatedButton(
               onPressed: () {
                 // Implement file upload functionality here
+                
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -161,72 +166,29 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+      bottomNavigationBar: CurvedNavigationBar(
+        height: 60, // Set a fixed height for the navigation bar
+        backgroundColor: Colors.transparent, // Set transparent background
+        color: Colors.deepPurple, // Set the color of the navigation bar
+        items: [
+          Icon(color: iconColor, Icons.home, size: 30),
+          Icon(color: iconColor, Icons.search, size: 30),
+          Icon(
+            color: iconColor,
+            Icons.notifications,
+            size: 30,
+          ),
+          Icon(
+            color: iconColor,
+            Icons.person_2_outlined,
+            size: 30,
+          )
+        ],
         onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
         },
-        backgroundColor: Colors.transparent, // Transparent background
-        selectedItemColor:
-            Colors.transparent, // Remove the default selected item color
-        unselectedItemColor: Colors.grey,
-        elevation: 0,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 35,
-              color: _currentIndex == 0
-                  ? null
-                  : null, // Applying the gradient only when selected
-            ),
-            label: 'Home',
-            backgroundColor: _currentIndex == 0
-                ? Color(0xFF2E3B60) // Active background color
-                : Colors.transparent, // Transparent background when not active
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle,
-              size: 35,
-              color: _currentIndex == 1
-                  ? null
-                  : null, // Applying the gradient only when selected
-            ),
-            label: 'Profile',
-            backgroundColor: _currentIndex == 1
-                ? Color(0xFF2E3B60) // Active background color
-                : Colors.transparent,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.upload_file,
-              size: 35,
-              color: _currentIndex == 2
-                  ? null
-                  : null, // Applying the gradient only when selected
-            ),
-            label: 'Upload',
-            backgroundColor: _currentIndex == 2
-                ? Color(0xFF2E3B60) // Active background color
-                : Colors.transparent,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.search,
-              size: 35,
-              color: _currentIndex == 3
-                  ? null
-                  : null, // Applying the gradient only when selected
-            ),
-            label: 'Scan Results',
-            backgroundColor: _currentIndex == 3
-                ? Color(0xFF2E3B60) // Active background color
-                : Colors.transparent,
-          ),
-        ],
       ),
     );
   }

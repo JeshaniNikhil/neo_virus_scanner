@@ -1,5 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:virus_scanner/customWidgets/customfonts.dart';
@@ -46,14 +45,14 @@ class _Register extends State<Register> {
                       fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Name Field
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 10),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
                     child: Customfonts(
                         title: 'Name',
                         color: Colors.white,
@@ -64,15 +63,15 @@ class _Register extends State<Register> {
                     width: double.infinity,
                     height: 50,
                     child: TextFormField(
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       controller: nameController,
                       decoration: InputDecoration(
-                        hintStyle: TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                        hintStyle: const TextStyle(color: Color(0xFF98989F), fontSize: 15),
                         filled: true,
                         hintText: 'Enter Your Name',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(99)),
-                        fillColor: Color(0xFF2E2E38),
+                        fillColor: const Color(0xFF2E2E38),
                       ),
                       validator: (name) {
                         if (name == null || name.isEmpty) {
@@ -90,14 +89,14 @@ class _Register extends State<Register> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Email Field
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 10),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
                     child: Customfonts(
                         title: 'Email',
                         color: Colors.white,
@@ -108,15 +107,15 @@ class _Register extends State<Register> {
                     width: double.infinity,
                     height: 50,
                     child: TextFormField(
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       controller: emailController,
                       decoration: InputDecoration(
-                        hintStyle: TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                        hintStyle: const TextStyle(color: Color(0xFF98989F), fontSize: 15),
                         filled: true,
                         hintText: 'Enter Your Email',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(99)),
-                        fillColor: Color(0xFF2E2E38),
+                        fillColor: const Color(0xFF2E2E38),
                       ),
                       validator: (email) {
                         if (email == null || email.isEmpty) {
@@ -133,14 +132,14 @@ class _Register extends State<Register> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Password Field
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 10),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
                     child: Customfonts(
                         title: 'Password',
                         color: Colors.white,
@@ -151,7 +150,7 @@ class _Register extends State<Register> {
                     width: double.infinity,
                     height: 50,
                     child: TextFormField(
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
                       obscureText: true,
                       obscuringCharacter: '*',
                       controller: passwordController,
@@ -159,10 +158,10 @@ class _Register extends State<Register> {
                         filled: true,
                         hintText: 'Enter Your Password',
                         hintStyle:
-                            TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                            const TextStyle(color: Color(0xFF98989F), fontSize: 15),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(99)),
-                        fillColor: Color(0xFF2E2E38),
+                        fillColor: const Color(0xFF2E2E38),
                       ),
                       validator: (password) {
                         if (password == null || password.isEmpty) {
@@ -182,14 +181,14 @@ class _Register extends State<Register> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Confirm Password Field
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 10),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
                     child: Customfonts(
                         title: 'Confirm Password',
                         color: Colors.white,
@@ -200,7 +199,7 @@ class _Register extends State<Register> {
                     width: double.infinity,
                     height: 50,
                     child: TextFormField(
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
                       obscureText: true,
                       obscuringCharacter: '*',
                       controller: confirmPasswordController,
@@ -208,10 +207,10 @@ class _Register extends State<Register> {
                         filled: true,
                         hintText: 'Confirm Your Password',
                         hintStyle:
-                            TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                            const TextStyle(color: Color(0xFF98989F), fontSize: 15),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(99)),
-                        fillColor: Color(0xFF2E2E38),
+                        fillColor: const Color(0xFF2E2E38),
                       ),
                       validator: (confirmPassword) {
                         if (confirmPassword == null || confirmPassword.isEmpty) {
@@ -226,7 +225,7 @@ class _Register extends State<Register> {
                   ),
                 ],
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
 
               // Register Button
               SizedBox(
@@ -234,7 +233,7 @@ class _Register extends State<Register> {
                 height: 50,
                 child: Ink(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       colors: [
                         Color(0xFF6E9BFF),
                         Color(0xFF1E5CE4),
@@ -257,7 +256,7 @@ class _Register extends State<Register> {
                         borderRadius: BorderRadius.circular(99),
                       ),
                     ),
-                    child: Customfonts(
+                    child: const Customfonts(
                       title: 'Register',
                       color: Colors.white,
                       fontsize: 20,
@@ -267,7 +266,7 @@ class _Register extends State<Register> {
                 ),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Already Registered? Login Here
               GestureDetector(
@@ -277,7 +276,7 @@ class _Register extends State<Register> {
                 child: Text(
                   "Already Registered? Login Here",
                   style: GoogleFonts.inter(
-                      color: Color(0xFF6E9BFF),
+                      color: const Color(0xFF6E9BFF),
                       fontSize: 16,
                       fontWeight: FontWeight.w500),
                 ),
