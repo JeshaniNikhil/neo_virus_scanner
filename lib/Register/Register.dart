@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:virus_scanner/customWidgets/customfonts.dart';
@@ -53,7 +52,7 @@ class _Register extends State<Register> {
               children: [
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
+                      const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
                   child: Customfonts(
                       title: 'Name',
                       color: Colors.white,
@@ -68,7 +67,7 @@ class _Register extends State<Register> {
                     controller: emailController,
                     decoration: InputDecoration(
                       hintStyle:
-                      TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                          TextStyle(color: Color(0xFF98989F), fontSize: 15),
                       filled: true,
                       hintText: 'Enter Your Email',
                       border: OutlineInputBorder(
@@ -98,7 +97,7 @@ class _Register extends State<Register> {
               children: [
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
+                      const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
                   child: Customfonts(
                       title: 'Email',
                       color: Colors.white,
@@ -113,7 +112,7 @@ class _Register extends State<Register> {
                     controller: emailController,
                     decoration: InputDecoration(
                       hintStyle:
-                      TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                          TextStyle(color: Color(0xFF98989F), fontSize: 15),
                       filled: true,
                       hintText: 'Enter Your Email',
                       border: OutlineInputBorder(
@@ -143,7 +142,7 @@ class _Register extends State<Register> {
               children: [
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
+                      const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
                   child: Customfonts(
                       title: 'Password',
                       color: Colors.white,
@@ -162,7 +161,7 @@ class _Register extends State<Register> {
                       filled: true,
                       hintText: 'Enter Your Password',
                       hintStyle:
-                      TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                          TextStyle(color: Color(0xFF98989F), fontSize: 15),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(99)),
                       fillColor: Color(0xFF2E2E38),
