@@ -11,7 +11,7 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Bottomnavbar(),
+      home: FileUploadScreen(),
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),
