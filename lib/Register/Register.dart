@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:virus_scanner/customWidgets/customfonts.dart';
 
-// BuildContext? context;
-
 class Register extends StatefulWidget {
   const Register({super.key});
   @override
@@ -14,18 +12,20 @@ class Register extends StatefulWidget {
 
 class _Register extends State<Register> {
   TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    // final width = MediaQuery.of(context).size.width * 0.5;
-    // final height = MediaQuery.of(context).size.height * 0.3;
     return Scaffold(
-      backgroundColor: const Color(0xFf1e1e25),
+      backgroundColor: const Color(0xFF1e1e25),
       appBar: AppBar(
-        backgroundColor: const Color(0xFf1e1e25),
+        backgroundColor: const Color(0xFF1e1e25),
         title: Center(
           child: Text(
-            textAlign: TextAlign.center,
             "Virus Scanner",
             style: GoogleFonts.inter(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
@@ -34,16 +34,17 @@ class _Register extends State<Register> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                'Register',
-                style: GoogleFonts.inter(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  'Register',
+                  style: GoogleFonts.inter(
+                      fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),
+                ),
               ),
             ),
             Column(
@@ -52,7 +53,7 @@ class _Register extends State<Register> {
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
+                  const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
                   child: Customfonts(
                       title: 'Name',
                       color: Colors.white,
@@ -67,7 +68,7 @@ class _Register extends State<Register> {
                     controller: emailController,
                     decoration: InputDecoration(
                       hintStyle:
-                          TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                      TextStyle(color: Color(0xFF98989F), fontSize: 15),
                       filled: true,
                       hintText: 'Enter Your Email',
                       border: OutlineInputBorder(
@@ -97,7 +98,7 @@ class _Register extends State<Register> {
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
+                  const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
                   child: Customfonts(
                       title: 'Email',
                       color: Colors.white,
@@ -112,7 +113,7 @@ class _Register extends State<Register> {
                     controller: emailController,
                     decoration: InputDecoration(
                       hintStyle:
-                          TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                      TextStyle(color: Color(0xFF98989F), fontSize: 15),
                       filled: true,
                       hintText: 'Enter Your Email',
                       border: OutlineInputBorder(
@@ -142,7 +143,7 @@ class _Register extends State<Register> {
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
+                  const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
                   child: Customfonts(
                       title: 'Password',
                       color: Colors.white,
@@ -161,7 +162,7 @@ class _Register extends State<Register> {
                       filled: true,
                       hintText: 'Enter Your Password',
                       hintStyle:
-                          TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                      TextStyle(color: Color(0xFF98989F), fontSize: 15),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(99)),
                       fillColor: Color(0xFF2E2E38),
@@ -185,45 +186,66 @@ class _Register extends State<Register> {
                       return null; // Return null if the input is valid
                     },
                   ),
-                ),
-                SizedBox(height: 40),
-                SizedBox(
-                  width: double
-                      .infinity, // Make the button stretch across the available width
-                  height: 50, // Define button height
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF6E9BFF),
-                          Color(0xFF1E5CE4),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      borderRadius: BorderRadius.circular(99),
+                ],
+              ),
+              SizedBox(height: 40),
+
+              // Register Button
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: Ink(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF6E9BFF),
+                        Color(0xFF1E5CE4),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(99),
-                        ),
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        // Registration logic here
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(99),
                       ),
-                      child: Customfonts(
-                        title: 'Register',
-                        color: Colors.white,
-                        fontsize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    ),
+                    child: Customfonts(
+                      title: 'Register',
+                      color: Colors.white,
+                      fontsize: 20,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+
+              SizedBox(height: 20),
+
+              // Already Registered? Login Here
+              GestureDetector(
+                onTap: () {
+                  // Navigate to login screen
+                },
+                child: Text(
+                  "Already Registered? Login Here",
+                  style: GoogleFonts.inter(
+                      color: Color(0xFF6E9BFF),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
