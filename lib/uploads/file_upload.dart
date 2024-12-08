@@ -1,37 +1,107 @@
+import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:virus_scanner/customWidgets/bottomNavbar.dart';
+import 'package:http/http.dart' as http;
 
 class FileUploadScreen extends StatefulWidget {
   const FileUploadScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _FileUploadScreenState createState() => _FileUploadScreenState();
 }
 
 class _FileUploadScreenState extends State<FileUploadScreen> {
-  int _currentIndex = 0; // Track selected index for bottom navigation
+  int _currentIndex = 0;
+  Color iconColor = Colors.white;
 
-  Color iconColor = Colors.white; // Define the icon color here
+  // Function to upload file and send it to VirusTotal API
+  Future<void> _uploadFile() async {
+    try {
+      // Open file picker
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result != null) {
+        File file = File(result.files.single.path!);
+
+        // Show a loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+
+        // VirusTotal API key
+        const String apiKey = 'cbbbb85ceea6a1f9a2403fb861d86e06a7418d768371552780aeb73caca67582';
+
+        // API endpoint for file analysis
+        const String url = 'https://www.virustotal.com/api/v3/files';
+
+        // Create multipart request
+        var request = http.MultipartRequest('POST', Uri.parse(url));
+        request.headers.addAll({'x-apikey': apiKey});
+        request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+        // Send request and await response
+        var response = await request.send();
+
+        // Close the loading dialog
+        Navigator.of(context).pop();
+
+        if (response.statusCode == 200) {
+          // Parse response
+          var responseBody = await http.Response.fromStream(response);
+          print('Response: ${responseBody.body}');
+          _showResponseDialog('File uploaded successfully!');
+        } else {
+          print('Error: ${response.statusCode}');
+          _showResponseDialog('File upload failed. Please try again.');
+        }
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      print('Error: $e');
+      _showResponseDialog('An error occurred while uploading the file.');
+    }
+  }
+
+  // Function to show response dialog
+  void _showResponseDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Neon Scanner Response'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF2E2E38),
+      backgroundColor: const Color(0xFF2E2E38),
       appBar: AppBar(
-        backgroundColor: Color(0xFF2E2E38),
+        backgroundColor: const Color(0xFF2E2E38),
         centerTitle: true,
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset(
-              'assets/images/logo.svg',
+              'assets/logo.svg',
               width: 40,
               height: 40,
             ),
             const SizedBox(width: 10),
-            Text(
+            const Text(
               "NeoVirus Scanner",
               style: TextStyle(
                 color: Colors.cyanAccent,
@@ -45,7 +115,6 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
         elevation: 0,
       ),
       body: SafeArea(
-        // Wrap in SafeArea to prevent overlap with bottom navigation
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,7 +135,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
               ),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     "File Upload",
                     style: TextStyle(
                       color: Colors.white,
@@ -83,106 +152,73 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  AspectRatio(
-                    aspectRatio: 1.5,
-                    child: Container(
-                      // width: 105,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade900,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blueAccent.withOpacity(0.4),
-                            blurRadius: 15.0,
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: Icon(
-                              Icons.folder_open,
-                              color: Colors.blueAccent,
-                              size: 45,
+                  GestureDetector(
+                    onTap: _uploadFile,
+                    child: AspectRatio(
+                      aspectRatio: 1.5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade900,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blueAccent.withOpacity(0.4),
+                              blurRadius: 15.0,
                             ),
-                          ),
-                          Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/images/file_upload.svg',
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.contain,
-                                ),
-                                const SizedBox(height: 20),
-                                SizedBox(
-                                  width: 200,
-                                  child: LinearProgressIndicator(
-                                    value: 0.5,
-                                    backgroundColor: Colors.grey.shade800,
-                                    color: Colors.cyanAccent,
-                                    minHeight: 8,
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            const Positioned(
+                              top: 10,
+                              left: 10,
+                              child: Icon(
+                                Icons.folder_open,
+                                color: Colors.blueAccent,
+                                size: 45,
+                              ),
+                            ),
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/file_upload.svg',
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.contain,
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 20),
+                                  const Text(
+                                    "Click to upload file",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                // Implement file upload functionality here
-                
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                minimumSize: Size(double.infinity, 56),
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                shadowColor: Colors.blueAccent,
-                elevation: 10,
-              ),
-              child: Text(
-                "Upload Files",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
           ],
         ),
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        height: 60, // Set a fixed height for the navigation bar
-        backgroundColor: Colors.transparent, // Set transparent background
-        color: Colors.deepPurple, // Set the color of the navigation bar
+        height: 60,
+        backgroundColor: Colors.transparent,
+        color: Colors.deepPurple,
         items: [
           Icon(color: iconColor, Icons.home, size: 30),
           Icon(color: iconColor, Icons.search, size: 30),
-          Icon(
-            color: iconColor,
-            Icons.notifications,
-            size: 30,
-          ),
-          Icon(
-            color: iconColor,
-            Icons.person_2_outlined,
-            size: 30,
-          )
+          Icon(color: iconColor, Icons.notifications, size: 30),
+          Icon(color: iconColor, Icons.person_2_outlined, size: 30),
         ],
         onTap: (index) {
           setState(() {

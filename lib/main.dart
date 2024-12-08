@@ -12,7 +12,7 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const Login(),
+      home: const FileUploadScreen(),
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),
