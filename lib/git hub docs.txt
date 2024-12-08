@@ -1,0 +1,12 @@
+step-1:
+	make changes in code
+
+
+step-2:
+	add commit message amd click down arrow and select commit & push btn
+
+
+how to fetch from another person changes
+	click on sync changes btn
+
+
