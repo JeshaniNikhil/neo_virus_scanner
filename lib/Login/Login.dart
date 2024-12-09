@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:virus_scanner/customWidgets/customfonts.dart';
+import 'package:virus_scanner/splash%20screen%20data/splash_screen.dart';
+import 'package:virus_scanner/uploads/file_upload.dart';
 
 // BuildContext? context;
 
@@ -160,7 +161,20 @@ class _Login extends State<Login> {
                       borderRadius: BorderRadius.circular(99),
                     ),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (emailController.text.isNotEmpty &&
+                            passwordController.text.isNotEmpty) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FileUploadScreen()));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SplashScreen()));
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,

@@ -13,7 +13,7 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  VirusScanApp(),
+      home:  Login(),
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),
