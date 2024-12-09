@@ -8,6 +8,8 @@ void main() {
 }
 
 class VirusScanApp extends StatelessWidget {
+  const VirusScanApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,6 +20,8 @@ class VirusScanApp extends StatelessWidget {
 }
 
 class ScanResultsScreen extends StatefulWidget {
+  const ScanResultsScreen({super.key});
+
   @override
   _ScanResultsScreenState createState() => _ScanResultsScreenState();
 }
@@ -40,7 +44,7 @@ class _ScanResultsScreenState extends State<ScanResultsScreen> {
      
     const apiKey = 'cbbbb85ceea6a1f9a2403fb861d86e06a7418d768371552780aeb73caca67582';
     const analysisToken = 'ODVlZTI2NTAxOTRhODE5OGM2NTMyYTk4ZWFlMWE4ODg6MTczMzY4MDE3OA==';
-    final apiUrl =
+    const apiUrl =
         'https://www.virustotal.com/api/v3/analyses/$analysisToken';
 
     try {
@@ -74,21 +78,21 @@ class _ScanResultsScreenState extends State<ScanResultsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan Results'),
+        title: const Text('Scan Results'),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Scan Summary',
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     // Wrap the PieChart in a SizedBox to provide explicit height
                     SizedBox(
                       height: 200,
@@ -114,22 +118,22 @@ class _ScanResultsScreenState extends State<ScanResultsScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Summary',
                       style: TextStyle(fontSize: 18),
                     ),
                     Text('Malicious: $maliciousCount'),
                     Text('Undetected: $undetectedCount'),
                     Text('Unsupported: $unsupportedCount'),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Detailed Results',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: detailedResults.length,
                       itemBuilder: (context, index) {
                         final engineName = detailedResults.keys.elementAt(index);

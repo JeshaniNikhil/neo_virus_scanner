@@ -19,7 +19,7 @@ class _BottomNavbar extends State<Bottomnavbar> {
         height: 60, // Set a fixed height for the navigation bar
         backgroundColor: Colors.transparent, // Set transparent background
         color: Colors.deepPurple, // Set the color of the navigation bar
-        items: [
+        items: const [
           Icon(color: iconColor, Icons.home, size: 30),
           Icon(color: iconColor, Icons.search, size: 30),
           Icon(
