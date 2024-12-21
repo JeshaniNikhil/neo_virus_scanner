@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:virus_scanner/customWidgets/customfonts.dart';
+import 'package:virus_scanner/Login/Login.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -16,6 +18,39 @@ class _Register extends State<Register> {
   TextEditingController confirmPasswordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> registerUser() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    try {
+      final email = emailController.text.trim();
+      final password = passwordController.text;
+
+      // Call Supabase API to create user
+      final response = await Supabase.instance.client.auth.signUp(
+        email: email,
+        password: password,
+      );
+
+      if (response.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Registration successful!")),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Login()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Registration failed. Please try again.")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,220 +83,94 @@ class _Register extends State<Register> {
               const SizedBox(height: 20),
 
               // Name Field
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
-                    child: Customfonts(
-                        title: 'Name',
-                        color: Colors.white,
-                        fontsize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: TextFormField(
-                      style: const TextStyle(color: Colors.white),
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintStyle: const TextStyle(color: Color(0xFF98989F), fontSize: 15),
-                        filled: true,
-                        hintText: 'Enter Your Name',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(99)),
-                        fillColor: const Color(0xFF2E2E38),
-                      ),
-                      validator: (name) {
-                        if (name == null || name.isEmpty) {
-                          return "Please Provide Your Name";
-                        }
-                        if (name.length > 50) {
-                          return "Name must be less than 50 characters";
-                        }
-                        if (!RegExp(r'^[a-zA-Z ]+\$').hasMatch(name)) {
-                          return "Name must contain only alphabets";
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
+              CustomTextField(
+                controller: nameController,
+                label: "Name",
+                hintText: "Enter Your Name",
+                validator: (name) {
+                  if (name == null || name.isEmpty) {
+                    return "Please Provide Your Name";
+                  }
+                  if (name.length > 50) {
+                    return "Name must be less than 50 characters";
+                  }
+                  if (!RegExp(r'^[a-zA-Z ]+$').hasMatch(name)) {
+                    return "Name must contain only alphabets";
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(height: 20),
 
               // Email Field
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
-                    child: Customfonts(
-                        title: 'Email',
-                        color: Colors.white,
-                        fontsize: 25,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: TextFormField(
-                      style: const TextStyle(color: Colors.white),
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        hintStyle: const TextStyle(color: Color(0xFF98989F), fontSize: 15),
-                        filled: true,
-                        hintText: 'Enter Your Email',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(99)),
-                        fillColor: const Color(0xFF2E2E38),
-                      ),
-                      validator: (email) {
-                        if (email == null || email.isEmpty) {
-                          return "Please Provide Your Email";
-                        }
-                        String pattern =
-                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\$';
-                        if (!RegExp(pattern).hasMatch(email)) {
-                          return "Please Enter a Valid Email Address";
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
+              CustomTextField(
+                controller: emailController,
+                label: "Email",
+                hintText: "Enter Your Email",
+                validator: (email) {
+                  if (email == null || email.isEmpty) {
+                    return "Please Provide Your Email";
+                  }
+                  String pattern =
+                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                  if (!RegExp(pattern).hasMatch(email)) {
+                    return "Please Enter a Valid Email Address";
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(height: 20),
 
               // Password Field
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
-                    child: Customfonts(
-                        title: 'Password',
-                        color: Colors.white,
-                        fontsize: 20,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: TextFormField(
-                      style: const TextStyle(color: Colors.white, fontSize: 15),
-                      obscureText: true,
-                      obscuringCharacter: '*',
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        hintText: 'Enter Your Password',
-                        hintStyle:
-                            const TextStyle(color: Color(0xFF98989F), fontSize: 15),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(99)),
-                        fillColor: const Color(0xFF2E2E38),
-                      ),
-                      validator: (password) {
-                        if (password == null || password.isEmpty) {
-                          return "Please Provide Your Password";
-                        }
-                        if (password.length < 8 || password.length > 20) {
-                          return "Password must be 8-20 characters long";
-                        }
-                        String pattern =
-                            r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@\$!%*?&])[A-Za-z\d@\$!%*?&]{8,20}\$';
-                        if (!RegExp(pattern).hasMatch(password)) {
-                          return "Password must include uppercase, lowercase, digit, and special character";
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
+              CustomTextField(
+                controller: passwordController,
+                label: "Password",
+                hintText: "Enter Your Password",
+                obscureText: true,
+                validator: (password) {
+                  if (password == null || password.isEmpty) {
+                    return "Please Provide Your Password";
+                  }
+                  if (password.length < 8 || password.length > 20) {
+                    return "Password must be 8-20 characters long";
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(height: 20),
 
               // Confirm Password Field
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
-                    child: Customfonts(
-                        title: 'Confirm Password',
-                        color: Colors.white,
-                        fontsize: 20,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: TextFormField(
-                      style: const TextStyle(color: Colors.white, fontSize: 15),
-                      obscureText: true,
-                      obscuringCharacter: '*',
-                      controller: confirmPasswordController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        hintText: 'Confirm Your Password',
-                        hintStyle:
-                            const TextStyle(color: Color(0xFF98989F), fontSize: 15),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(99)),
-                        fillColor: const Color(0xFF2E2E38),
-                      ),
-                      validator: (confirmPassword) {
-                        if (confirmPassword == null || confirmPassword.isEmpty) {
-                          return "Please Confirm Your Password";
-                        }
-                        if (confirmPassword != passwordController.text) {
-                          return "Passwords do not match";
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
+              CustomTextField(
+                controller: confirmPasswordController,
+                label: "Confirm Password",
+                hintText: "Confirm Your Password",
+                obscureText: true,
+                validator: (confirmPassword) {
+                  if (confirmPassword == null || confirmPassword.isEmpty) {
+                    return "Please Confirm Your Password";
+                  }
+                  if (confirmPassword != passwordController.text) {
+                    return "Passwords do not match";
+                  }
+                  return null;
+                },
               ),
+
               const SizedBox(height: 40),
 
               // Register Button
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xFF6E9BFF),
-                        Color(0xFF1E5CE4),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
+              ElevatedButton(
+                onPressed: registerUser,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6E9BFF),
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(99),
                   ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Registration logic here
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(99),
-                      ),
-                    ),
-                    child: const Customfonts(
-                      title: 'Register',
-                      color: Colors.white,
-                      fontsize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                child: Text(
+                  'Register',
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -271,20 +180,92 @@ class _Register extends State<Register> {
               // Already Registered? Login Here
               GestureDetector(
                 onTap: () {
-                  // Navigate to login screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login()),
+                  );
                 },
-                child: Text(
-                  "Already Registered? Login Here",
-                  style: GoogleFonts.inter(
-                      color: const Color(0xFF6E9BFF),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
+                child: RichText(
+                  text: TextSpan(
+                    text: "Already Registered? ",
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: "Login Here",
+                        style: GoogleFonts.inter(
+                          color: const Color(0xFF6E9BFF),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final String hintText;
+  final bool obscureText;
+  final String? Function(String?) validator;
+
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.hintText,
+    this.obscureText = false,
+    required this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 10),
+          child: Text(
+            label,
+            style: GoogleFonts.inter(
+              color: Colors.white,
+              fontSize: 25,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: TextFormField(
+            style: const TextStyle(color: Colors.white),
+            obscureText: obscureText,
+            controller: controller,
+            decoration: InputDecoration(
+              hintStyle: const TextStyle(color: Color(0xFF98989F), fontSize: 15),
+              filled: true,
+              hintText: hintText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(99),
+              ),
+              fillColor: const Color(0xFF2E2E38),
+            ),
+            validator: validator,
+          ),
+        ),
+      ],
     );
   }
 }

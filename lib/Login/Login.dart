@@ -1,12 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:virus_scanner/customWidgets/customfonts.dart';
-import 'package:virus_scanner/splash%20screen%20data/splash_screen.dart';
 import 'package:virus_scanner/uploads/file_upload.dart';
-
-// BuildContext? context;
+import 'package:virus_scanner/register/register.dart'; // Import the Register screen
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -17,20 +14,59 @@ class Login extends StatefulWidget {
 class _Login extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  final SupabaseClient supabase = Supabase.instance.client;
+
+  void _login() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    try {
+      final response = await supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      if (response.session != null) {
+        // Successful login
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const FileUploadScreen()),
+        );
+      } else {
+        // Error handling
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid login credentials')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final width = MediaQuery.of(context).size.width * 0.5;
-    // final height = MediaQuery.of(context).size.height * 0.3;
     return Scaffold(
       backgroundColor: const Color(0xFf1e1e25),
       appBar: AppBar(
         backgroundColor: const Color(0xFf1e1e25),
         title: Center(
           child: Text(
-            textAlign: TextAlign.center,
             "Virus Scanner",
             style: GoogleFonts.inter(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
@@ -43,18 +79,20 @@ class _Login extends State<Login> {
               child: Text(
                 'Login',
                 style: GoogleFonts.inter(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
             ),
+            const SizedBox(height: 20),
+
+            // Email input field
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
                   child: Customfonts(
                       title: 'Email',
                       color: Colors.white,
@@ -65,41 +103,29 @@ class _Login extends State<Login> {
                   width: double.infinity,
                   height: 50,
                   child: TextFormField(
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     controller: emailController,
                     decoration: InputDecoration(
-                      hintStyle:
-                          TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                      hintStyle: const TextStyle(
+                          color: Color(0xFF98989F), fontSize: 15),
                       filled: true,
                       hintText: 'Enter Your Email',
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(99)),
-                      fillColor: Color(0xFF2E2E38),
+                      fillColor: const Color(0xFF2E2E38),
                     ),
-                    validator: (email) {
-                      if (email == null || email.isEmpty) {
-                        return "Please Provide Your Email";
-                      }
-                      // Regular expression for validating an email
-                      String pattern =
-                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-                      RegExp regex = RegExp(pattern);
-                      if (!regex.hasMatch(email)) {
-                        return "Please Enter a Valid Email Address";
-                      }
-                      return null; // Return null if the input is valid
-                    },
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 20),
+
+            // Password input field
             Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 20),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 9, vertical: 10),
                   child: Customfonts(
                       title: 'Password',
                       color: Colors.white,
@@ -110,88 +136,89 @@ class _Login extends State<Login> {
                   width: double.infinity,
                   height: 50,
                   child: TextFormField(
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
                     obscureText: true,
                     obscuringCharacter: '*',
                     controller: passwordController,
                     decoration: InputDecoration(
                       filled: true,
                       hintText: 'Enter Your Password',
-                      hintStyle:
-                          TextStyle(color: Color(0xFF98989F), fontSize: 15),
+                      hintStyle: const TextStyle(
+                          color: Color(0xFF98989F), fontSize: 15),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(99)),
-                      fillColor: Color(0xFF2E2E38),
-                    ),
-                    validator: (password) {
-                      if (password == null || password.isEmpty) {
-                        return "Please Provide Your Password";
-                      }
-                      if (password.length < 8) {
-                        return "Password must be at least 8 characters long";
-                      }
-                      if (password.length > 20) {
-                        return "Password must be no more than 20 characters long";
-                      }
-                      String pattern =
-                          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$';
-                      RegExp regex = RegExp(pattern);
-                      if (!regex.hasMatch(password)) {
-                        return "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character";
-                      }
-                      return null; // Return null if the input is valid
-                    },
-                  ),
-                ),
-                SizedBox(height: 40),
-                SizedBox(
-                  width: double
-                      .infinity, // Make the button stretch across the available width
-                  height: 50, // Define button height
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF6E9BFF),
-                          Color(0xFF1E5CE4),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      borderRadius: BorderRadius.circular(99),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (emailController.text.isNotEmpty &&
-                            passwordController.text.isNotEmpty) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FileUploadScreen()));
-                        } else {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SplashScreen()));
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(99),
-                        ),
-                      ),
-                      child: Customfonts(
-                        title: 'Login',
-                        color: Colors.white,
-                        fontsize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      fillColor: const Color(0xFF2E2E38),
                     ),
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 40),
+
+            // Login button
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: Ink(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFF6E9BFF),
+                      Color(0xFF1E5CE4),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(99),
+                ),
+                child: ElevatedButton(
+                  onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(99),
+                    ),
+                  ),
+                  child: const Customfonts(
+                    title: 'Login',
+                    color: Colors.white,
+                    fontsize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Not Registered? Register Here
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Register()),
+                );
+              },
+              child: RichText(
+                text: TextSpan(
+                  text: "Not Registered? ",
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "Register Here",
+                      style: GoogleFonts.inter(
+                        color: const Color(0xFF6E9BFF),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

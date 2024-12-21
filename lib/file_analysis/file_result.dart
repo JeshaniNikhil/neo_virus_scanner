@@ -10,14 +10,16 @@ class VirusScanApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ScanResultsScreen(),
+      home: ScanResultsScreen(analysisToken: '',),
       theme: ThemeData.dark(),
     );
   }
 }
 
 class ScanResultsScreen extends StatefulWidget {
-  const ScanResultsScreen({super.key});
+  final String analysisToken;
+
+  const ScanResultsScreen({super.key, required this.analysisToken});
 
   @override
   _ScanResultsScreenState createState() => _ScanResultsScreenState();
@@ -38,11 +40,8 @@ class _ScanResultsScreenState extends State<ScanResultsScreen> {
   }
 
   Future<void> fetchScanResults() async {
-    const apiKey =
-        'cbbbb85ceea6a1f9a2403fb861d86e06a7418d768371552780aeb73caca67582';
-    const analysisToken =
-        'ODVlZTI2NTAxOTRhODE5OGM2NTMyYTk4ZWFlMWE4ODg6MTczMzY4MDE3OA==';
-    const apiUrl = 'https://www.virustotal.com/api/v3/analyses/$analysisToken';
+    const apiKey = 'cbbbb85ceea6a1f9a2403fb861d86e06a7418d768371552780aeb73caca67582';
+    final apiUrl = 'https://www.virustotal.com/api/v3/analyses/${widget.analysisToken}';
 
     try {
       final response = await http.get(
@@ -65,9 +64,15 @@ class _ScanResultsScreenState extends State<ScanResultsScreen> {
         });
       } else {
         print('Error: ${response.body}');
+        setState(() {
+          isLoading = false;
+        });
       }
     } catch (e) {
       print('Error fetching scan results: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -80,92 +85,77 @@ class _ScanResultsScreenState extends State<ScanResultsScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Scan Summary',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
-                  // Wrap the PieChart in a SizedBox to provide explicit height
-                  SizedBox(
-                    height: 200,
-                    child: PieChart(
-                      PieChartData(
-                        sections: [
-                          PieChartSectionData(
-                            value: maliciousCount.toDouble(),
-                            color: Colors.red,
-                            title: 'Malicious',
-                          ),
-                          PieChartSectionData(
-                            value: undetectedCount.toDouble(),
-                            color: Colors.blue,
-                            title: 'Undetected',
-                          ),
-                          PieChartSectionData(
-                            value: unsupportedCount.toDouble(),
-                            color: Colors.orange,
-                            title: 'Unsupported',
-                          ),
-                        ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Scan Summary',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 200,
+                child: PieChart(
+                  PieChartData(
+                    sections: [
+                      PieChartSectionData(
+                        value: maliciousCount.toDouble(),
+                        color: Colors.red,
+                        title: 'Malicious',
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Summary',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text('Malicious: $maliciousCount'),
-                  Text('Undetected: $undetectedCount'),
-                  Text('Unsupported: $unsupportedCount'),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Detailed Results',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: detailedResults.length,
-                        itemBuilder: (context, index) {
-                          final engineName =
-                              detailedResults.keys.elementAt(index);
-                          final engineDetails = detailedResults[engineName];
-                          final result = engineDetails['result'] ?? 'No threat';
-                      
-                          return Column(
-                            children: [
-                              ListTile(
-                                leading: Icon(
-                                  result == 'No threat'
-                                      ? Icons.check_circle
-                                      : Icons.warning,
-                                  color: result == 'No threat'
-                                      ? Colors.green
-                                      : Colors.red,
-                                ),
-                                title: Text(engineName),
-                                subtitle: Text(result),
-                              ),
-                            ],
-                          );
-                        },
+                      PieChartSectionData(
+                        value: undetectedCount.toDouble(),
+                        color: Colors.blue,
+                        title: 'Undetected',
+                      ),
+                      PieChartSectionData(
+                        value: unsupportedCount.toDouble(),
+                        color: Colors.orange,
+                        title: 'Unsupported',
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+              const SizedBox(height: 20),
+              const Text(
+                'Summary',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text('Malicious: $maliciousCount'),
+              Text('Undetected: $undetectedCount'),
+              Text('Unsupported: $unsupportedCount'),
+              const SizedBox(height: 20),
+              const Text(
+                'Detailed Results',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: detailedResults.length,
+                itemBuilder: (context, index) {
+                  final engineName = detailedResults.keys.elementAt(index);
+                  final engineDetails = detailedResults[engineName];
+                  final result = engineDetails['result'] ?? 'No threat';
+
+                  return ListTile(
+                    leading: Icon(
+                      result == 'No threat' ? Icons.check_circle : Icons.warning,
+                      color: result == 'No threat' ? Colors.green : Colors.red,
+                    ),
+                    title: Text(engineName),
+                    subtitle: Text(result),
+                  );
+                },
+              ),
+            ],
           ),
+        ),
+      ),
     );
   }
 }
+

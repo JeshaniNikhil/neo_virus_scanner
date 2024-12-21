@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:virus_scanner/file_analysis/file_result.dart';
 class FileUploadScreen extends StatefulWidget {
   const FileUploadScreen({super.key});
 
@@ -20,7 +22,6 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
   // Function to upload file and send it to VirusTotal API
   Future<void> _uploadFile() async {
     try {
-      // Open file picker
       FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result != null) {
         File file = File(result.files.single.path!);
@@ -36,8 +37,6 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
 
         // VirusTotal API key
         const String apiKey = 'cbbbb85ceea6a1f9a2403fb861d86e06a7418d768371552780aeb73caca67582';
-
-        // API endpoint for file analysis
         const String url = 'https://www.virustotal.com/api/v3/files';
 
         // Create multipart request
@@ -52,21 +51,27 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
         Navigator.of(context).pop();
 
         if (response.statusCode == 200) {
-          // Parse response
           var responseBody = await http.Response.fromStream(response);
-          print('Response: ${responseBody.body}');
-          _showResponseDialog('File uploaded successfully!');
+          var responseData = json.decode(responseBody.body);
+          var analysisToken = responseData['data']['id'];
+
+          // Navigate to Scan Results Screen with the token
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ScanResultsScreen(analysisToken: analysisToken),
+            ),
+          );
         } else {
-          print('Error: ${response.statusCode}');
           _showResponseDialog('File upload failed. Please try again.');
         }
       }
     } catch (e) {
       Navigator.of(context).pop();
-      print('Error: $e');
       _showResponseDialog('An error occurred while uploading the file.');
     }
   }
+
 
   // Function to show response dialog
   void _showResponseDialog(String message) {
