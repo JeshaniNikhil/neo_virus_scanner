@@ -12,19 +12,33 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(
     url: 'https://ehketgceejfwurpmbymf.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoa2V0Z2NlZWpmd3VycG1ieW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2MzU4MjIsImV4cCI6MjA1MDIxMTgyMn0.JeFMZdy1dBTR70SzVGHENavXoIIUD3qhVOm9U5UYkTY',
   );
-  //error solve thay gay che    
-  runApp(
-    MaterialApp(
+
+  runApp(const VirusScannerApp());
+}
+
+class VirusScannerApp extends StatelessWidget {
+  const VirusScannerApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:const Login(),
+      initialRoute: '/login', // Set the initial route
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),
-    ),
-  );
+      routes: {
+        '/login': (context) => const Login(),
+        '/register': (context) => const Register(),
+        '/splash': (context) => const SplashScreen(),
+        '/upload': (context) => const FileUploadScreen(),
+      },
+    );
+  }
 }
