@@ -1,24 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:virus_scanner/file_analysis/file_result.dart';
+
 class FileUploadScreen extends StatefulWidget {
   const FileUploadScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _FileUploadScreenState createState() => _FileUploadScreenState();
 }
 
 class _FileUploadScreenState extends State<FileUploadScreen> {
-
-  int _currentIndex = 0;
-  Color iconColor = Colors.white;
-
   // Function to upload file and send it to VirusTotal API
   Future<void> _uploadFile() async {
     try {
@@ -54,8 +49,9 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
           var responseBody = await http.Response.fromStream(response);
           var responseData = json.decode(responseBody.body);
           var analysisToken = responseData['data']['id'];
-
+          
           // Navigate to Scan Results Screen with the token
+          if (!mounted) return;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -71,7 +67,6 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
       _showResponseDialog('An error occurred while uploading the file.');
     }
   }
-
 
   // Function to show response dialog
   void _showResponseDialog(String message) {
@@ -214,22 +209,6 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        height: 60,
-        backgroundColor: Colors.transparent,
-        color: Colors.deepPurple,
-        items: [
-          Icon(color: iconColor, Icons.home, size: 30),
-          Icon(color: iconColor, Icons.search, size: 30),
-          Icon(color: iconColor, Icons.notifications, size: 30),
-          Icon(color: iconColor, Icons.person_2_outlined, size: 30),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
       ),
     );
   }

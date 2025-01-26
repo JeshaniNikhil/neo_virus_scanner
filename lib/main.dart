@@ -29,7 +29,7 @@ class VirusScannerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login', // Set the initial route
+      initialRoute: '/splash', // Updated initial route to splash
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(),
       ),
@@ -38,6 +38,7 @@ class VirusScannerApp extends StatelessWidget {
         '/register': (context) => const Register(),
         '/splash': (context) => const SplashScreen(),
         '/upload': (context) => const FileUploadScreen(),
+        '/result': (context) => const ScanResultsScreen(analysisToken: '',),
       },
     );
   }
